@@ -16,7 +16,7 @@ COPY ./api.py ./manifest.json ./versions.sh ./konvert.sh ./requirements.txt /
 RUN pip3 install --upgrade pip && \
     pip3 install -r /requirements.txt && \
     apk add --no-cache curl bash jq && \
-    curl -L "https://storage.googleapis.com/kubernetes-release/release/v${K8S_VERSION}/bin/linux/${ARCH}/kubectl" /usr/bin/kubectl && \
+    curl -L "https://storage.googleapis.com/kubernetes-release/release/v${K8S_VERSION}/bin/linux/${ARCH}/kubectl" -o /usr/bin/kubectl && \
     chmod +x /usr/bin/kubectl /versions.sh /konvert.sh && \
     curl -L "https://github.com/kubernetes/kompose/releases/download/v${KOMPOSE_VERSION_N}/kompose-linux-${ARCH}" -o /usr/bin/kompose-${KOMPOSE_VERSION_N} && \
     chmod +x /usr/bin/kompose-${KOMPOSE_VERSION_N} && \
