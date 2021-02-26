@@ -2,6 +2,8 @@
 
 An http api that aims to convert yaml from docker-compose into K8S manifests.
 
+An instance of this API is available here: https://kompose.comwork.io
+
 ## Table of content
 
 [[_TOC_]]
@@ -14,6 +16,10 @@ An http api that aims to convert yaml from docker-compose into K8S manifests.
 
 ## Getting started
 
+### Hosted by comwork
+
+
+
 ### Run the api using docker-compose
 
 ```shell
@@ -23,6 +29,10 @@ $ docker-compose up -d
 ```
 
 ### Endpoints
+
+The following endpoints are also available here: https://kompose.comwork.io
+
+So you can for each one replace http://0.0.0.0:8080/ by https://kompose.comwork.io
 #### Health check
 
 ```shell
