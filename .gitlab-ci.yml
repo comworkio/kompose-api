@@ -29,7 +29,7 @@ kompose-api-x86:
   tags:
     - kompose-api
 
-kompose-api-x86:
+kompose-deploy:
   stage: deploy
   script:
     - setsid ./ci/docker-deliver.sh "kompose-api" "1.0" "x86"
