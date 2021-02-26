@@ -31,8 +31,8 @@ def is_empty_request_field (name):
 def get_kompose_available_versions():
     return json.loads(get_script_output("/kompose_versions.sh"))
 
-def konvert (filname, provider):
-    return get_script_output("/konvert.sh {} {}".format(filname, provider))
+def konvert (filname, version, provider):
+    return get_script_output("/konvert.sh {} {} {}".format(filname, version, provider))
 
 class KomposeVersionsApi(Resource):
     def get(self):
@@ -56,13 +56,16 @@ class KomposeApi(Resource):
             }, 405
 
         provider = request.headers.get('X-K8S-Provider')
+        if is_empty(provider):
+            provider = ""
+
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=FileStorage, location='files')
         args = parse.parse_args()
         tmp_file = args['file']
         filename = "docker-compose-{}.yml".format(uuid.uuid1())
         tmp_file.save(filename)
-        return Response(konvert(filename, provider), mimetype='application/x-yaml')
+        return Response(konvert(filename, requested_version, provider), mimetype='application/x-yaml')
 
 class RootEndPoint(Resource):
     def get(self):
