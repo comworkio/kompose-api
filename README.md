@@ -23,7 +23,7 @@ $ curl http://0.0.0.0:8080/|jq .
 }
 ```
 
-### Getting the compose versions
+### Getting the kompose versions
 
 ```shell
 curl http://0.0.0.0:8080/kompose/versions|jq .
@@ -35,3 +35,16 @@ curl http://0.0.0.0:8080/kompose/versions|jq .
   ]
 }
 ```
+
+The you'll have to refer to [kompose website](./https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
+
+## Manifest endpoint
+
+```shell
+$ curl http://0.0.0.0:8080/manifest|jq .
+{
+  "sha": "043633e19674a7b18a17cde26143ad94effe3dbd"
+}
+```
+
+Get the last git sha used to build the image.
