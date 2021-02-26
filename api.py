@@ -31,6 +31,9 @@ def is_empty_request_field (name):
 def get_available_versions(var):
     return json.loads(get_script_output("/versions.sh {}".format(var)))
 
+def get_kompose_available_versions():
+    return get_available_versions("KOMPOSE_VERSIONS")
+
 def konvert (filename, version, provider, namespace, apply):
     return get_script_output("/konvert.sh {} {} {} {} {}".format(filename, version, provider, namespace, apply))
 
@@ -38,7 +41,7 @@ class VersionsApi(Resource):
     def get(self):
         return {
             'status': 'ok',
-            'kompose_versions': get_available_versions("KOMPOSE_VERSIONS"),
+            'kompose_versions': get_kompose_available_versions(),
             'kubectl_versions': get_available_versions("K8S_VERSION")
         }
 
