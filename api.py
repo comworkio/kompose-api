@@ -42,6 +42,11 @@ class KomposeVersionsApi(Resource):
         }
 
 class KomposeApi(Resource):
+    def get(self):
+        return {
+            'status': 'ok',
+            'alive': True
+        }
     def post(self):
         available_versions = get_kompose_available_versions()
         requested_version = request.headers.get('X-Kompose-Version')
@@ -65,14 +70,7 @@ class KomposeApi(Resource):
         tmp_file = args['file']
         filename = "docker-compose-{}.yml".format(uuid.uuid1())
         tmp_file.save(filename)
-        return Response(konvert(filename, requested_version, provider), mimetype='application/x-yaml')
-
-class RootEndPoint(Resource):
-    def get(self):
-        return {
-            'status': 'ok',
-            'alive': True
-        }
+        return Response(konvert(filename, requested_version, provider), mimetype='application/x-yaml')    
 
 class ManifestEndPoint(Resource):
     def get(self):
@@ -83,12 +81,10 @@ class ManifestEndPoint(Resource):
         except IOError as err:
             return 500, {'status': 'error', 'reason': err}
 
-health_check_routes = ['/', '/health', '/health/']
-kompose_versions_routes = ['/kompose/versions', '/kompose-api/versions', '/kompose/versions/', '/kompose-api/versions/']
-kompose_routes = ['/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
+kompose_routes = ['/', '/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
+kompose_versions_routes = ['/versions', '/versions/', '/kompose/versions', '/kompose-api/versions', '/kompose/versions/', '/kompose-api/versions/']
 manifest_routes = ['/manifest', '/manifest/']
 
-api.add_resource(RootEndPoint, *health_check_routes)
 api.add_resource(KomposeVersionsApi, *kompose_versions_routes)
 api.add_resource(KomposeApi, *kompose_routes)
 api.add_resource(ManifestEndPoint, *manifest_routes)
