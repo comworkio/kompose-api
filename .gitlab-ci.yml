@@ -1,6 +1,7 @@
 stages:
   - mirror
   - publish
+  - deploy
 
 mirror:
   stage: mirror
@@ -11,3 +12,37 @@ mirror:
   tags:
     - kompose-api
 
+kompose-api-x86:
+  stage: publish
+  script:
+    - setsid ./ci/docker-deliver.sh "kompose-api" "1.0" "x86"
+  only:
+    refs:
+      - /^(main.*)$/
+    changes:
+      - api.py
+      - Dockerfile
+      - docker-compose-build-x86.yml
+      - ci/docker-deliver.sh
+      - kompose_versions.sh
+      - konvert.sh
+  tags:
+    - kompose-api
+
+kompose-api-x86:
+  stage: deploy
+  script:
+    - setsid ./ci/docker-deliver.sh "kompose-api" "1.0" "x86"
+  only:
+    refs:
+      - /^(main.*)$/
+    changes:
+      - api.py
+      - Dockerfile
+      - docker-compose-build-x86.yml
+      - docker-compose-comwork.yml
+      - ci/docker-deliver.sh
+      - kompose_versions.sh
+      - konvert.sh
+  tags:
+    - kompose-api

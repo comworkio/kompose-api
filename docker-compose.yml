@@ -1,8 +1,8 @@
 version: "3.3"
 
 services: 
-  cmd-api:
-    image: comworkio/cmd-api:latest
+  kompose-api:
+    image: comworkio/kompose-api:latest
     user: root
     ports: 
       - 8080:8080

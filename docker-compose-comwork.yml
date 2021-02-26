@@ -4,8 +4,5 @@ services:
   kompose-api:
     image: comworkio/kompose-api:latest
     user: root
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports: 
-      - 8080:8080
+      - 8080:8071
