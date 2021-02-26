@@ -79,7 +79,7 @@ curl https://kompose.comwork.io/versions|jq .
 
 The you'll have to refer to [kompose website](./https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
 
-### Convert a docker-compose file into Kubernetes manifest
+#### Convert a docker-compose file into Kubernetes manifest
 
 ```shell
 $ curl -X POST https://kompose.comwork.io/ -F "file=@docker-compose.yml"
@@ -147,7 +147,7 @@ Note: the following headers are available:
 * `X-K8S-NS`: specify the kubernetes namespace
 * `X-K8S-Apply`: directly apply on the cluster (enabled if the environment variable `ENABLE_KUBECTL_APPLY` is set with `true`)
 
-### Manifest endpoint
+#### Manifest endpoint
 
 ```shell
 $ curl "https://kompose.comwork.io/manifest"|jq .
