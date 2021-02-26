@@ -5,4 +5,4 @@ services:
     image: comworkio/kompose-api:1.0
     user: root
     ports: 
-      - 8080:8071
+      - 8080:8072
