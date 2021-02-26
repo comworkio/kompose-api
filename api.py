@@ -32,7 +32,7 @@ def get_available_versions(var):
     return json.loads(get_script_output("/versions.sh {}".format(var)))
 
 def get_kompose_available_versions():
-    return get_available_versions("KOMPOSE_VERSIONS")
+    return get_available_versions("KOMPOSE_VERSION")
 
 def konvert (filename, version, provider, namespace, apply):
     return get_script_output("/konvert.sh {} {} {} {} {}".format(filename, version, provider, namespace, apply))
