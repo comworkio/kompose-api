@@ -2,7 +2,7 @@ version: "3.3"
 
 services: 
   kompose-api:
-    image: comworkio/kompose-api:latest
+    image: comworkio/kompose-api:1.0
     user: root
     ports: 
       - 8080:8071
