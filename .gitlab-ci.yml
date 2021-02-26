@@ -1,0 +1,13 @@
+stages:
+  - mirror
+  - publish
+
+mirror:
+  stage: mirror
+  script:
+    - setsid ./ci/mirror.sh
+  only:
+    - /^(main.*)$/
+  tags:
+    - kompose-api
+
