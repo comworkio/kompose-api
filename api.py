@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_restful import Resource, Api, reqparse
 from werkzeug.datastructures import FileStorage
 from subprocess import check_output
@@ -62,9 +62,7 @@ class KomposeApi(Resource):
         tmp_file = args['file']
         filename = "docker-compose-{}.yml".format(uuid.uuid1())
         tmp_file.save(filename)
-        return konvert(filename, provider), "application/x-yaml"
-        
-        return file.read()
+        return Response(konvert(filename, provider), mimetype='application/x-yaml')
 
 class RootEndPoint(Resource):
     def get(self):
