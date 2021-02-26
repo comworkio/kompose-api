@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd /
-v=$(env | grep KOMPOSE_VERSION | cut -d "=" -f2 | sort -u)
+v=$(env | grep "${1}" | cut -d "=" -f2 | sort -u)
 jq -nc '$ARGS.positional' --args ${v[@]}

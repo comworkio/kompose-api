@@ -19,7 +19,7 @@ def get_script_output (cmd):
         return check_output(cmd, shell=True, universal_newlines=True)
 
 def is_not_empty (var):
-    return var is not None and "" != var and "null" != var and "nil" != var
+    return var is not None and "" != var and "null" != var and "nil" != var and "false" != var and "False" != var
 
 def is_empty (var):
     return not is_not_empty(var)
@@ -28,17 +28,18 @@ def is_empty_request_field (name):
     body = request.get_json(force=True)
     return not name in body or is_empty(body[name])
 
-def get_kompose_available_versions():
-    return json.loads(get_script_output("/kompose_versions.sh"))
+def get_available_versions(var):
+    return json.loads(get_script_output("/versions.sh {}".format(var)))
 
-def konvert (filname, version, provider):
-    return get_script_output("/konvert.sh {} {} {}".format(filname, version, provider))
+def konvert (filename, version, provider, namespace, apply):
+    return get_script_output("/konvert.sh {} {} {} {} {}".format(filename, version, provider, namespace, apply))
 
-class KomposeVersionsApi(Resource):
+class VersionsApi(Resource):
     def get(self):
         return {
             'status': 'ok',
-            'available_versions': get_kompose_available_versions()
+            'kompose_versions': get_kompose_available_versions("KOMPOSE_VERSIONS"),
+            'kubectl_versions': get_available_versions("K8S_VERSION")
         }
 
 class KomposeApi(Resource):
@@ -62,7 +63,15 @@ class KomposeApi(Resource):
 
         provider = request.headers.get('X-K8S-Provider')
         if is_empty(provider):
-            provider = ""
+            provider = "null"
+
+        namespace = request.headers.get('X-K8S-NS')
+        if is_empty(namespace):
+            namespace = "null"
+
+        apply = request.headers.get('X-K8S-Apply')
+        if is_empty(namespace) or is_empty(os.environ['ENABLE_KUBECTL_APPLY']):
+            apply = "null"
 
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=FileStorage, location='files')
@@ -70,7 +79,7 @@ class KomposeApi(Resource):
         tmp_file = args['file']
         filename = "docker-compose-{}.yml".format(uuid.uuid1())
         tmp_file.save(filename)
-        return Response(konvert(filename, requested_version, provider), mimetype='application/x-yaml')    
+        return Response(konvert(filename, requested_version, provider, namespace, apply), mimetype='application/x-yaml')    
 
 class ManifestEndPoint(Resource):
     def get(self):
@@ -82,10 +91,10 @@ class ManifestEndPoint(Resource):
             return 500, {'status': 'error', 'reason': err}
 
 kompose_routes = ['/', '/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
-kompose_versions_routes = ['/versions', '/versions/', '/kompose/versions', '/kompose-api/versions', '/kompose/versions/', '/kompose-api/versions/']
+versions_routes = ['/versions', '/versions/']
 manifest_routes = ['/manifest', '/manifest/']
 
-api.add_resource(KomposeVersionsApi, *kompose_versions_routes)
+api.add_resource(VersionsApi, *versions_routes)
 api.add_resource(KomposeApi, *kompose_routes)
 api.add_resource(ManifestEndPoint, *manifest_routes)
 

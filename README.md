@@ -4,6 +4,22 @@ An http api that aims to convert yaml from docker-compose into K8S manifests.
 
 An instance of this API is available here: https://kompose.comwork.io
 
+It's based on kompose.io and available as a "Kompose as a service".
+
+Basically you can directly deploy your docker-compose file using one single command:
+
+```shell
+curl -X POST https://kompose.comwork.io/ -F "file=@docker-compose.yml" | kubectl -n your-namespace apply -f -
+```
+
+or
+
+```shell
+curl -X POST https://kompose.k8s.yourcluster.io/ -F "file=@docker-compose.yml" -H "X-K8S-Apply: true"
+```
+
+In the case where you've deployed your own instance on your own cluster with the right service-account (of course you'll have to replace `https://kompose.k8s.yourcluster.io` by your own url).
+
 ## Table of content
 
 [[_TOC_]]
@@ -17,8 +33,6 @@ An instance of this API is available here: https://kompose.comwork.io
 ## Getting started
 
 ### Hosted by comwork
-
-
 
 ### Run the api using docker-compose
 
@@ -47,9 +61,12 @@ $ curl https://kompose.comwork.io|jq .
 curl https://kompose.comwork.io/versions|jq .
 {
   "status": "ok",
-  "available_versions": [
+  "kompose_versions": [
     "1.21.0",
     "1.22.0"
+  ],
+  "kubectl_versions": [
+    "1.18.2"
   ]
 }
 ```
@@ -121,6 +138,8 @@ metadata: {}
 Note: the following headers are available:
 * `X-Kompose-Version`: the version of `kompose` you want to use (see the previous endpoint to see which versions are avaible)
 * `X-K8S-Provider`: the K8S provider (i.e: `OpenShift`)
+* `X-K8S-NS`: specify the kubernetes namespace
+* `X-K8S-Apply`: directly apply on the cluster (enabled if the environment variable `ENABLE_KUBECTL_APPLY` is set with `true`)
 
 ### Manifest endpoint
 
