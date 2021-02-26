@@ -12,8 +12,18 @@ An http api that aims to convert yaml from docker-compose into K8S manifests.
 * Github mirror backup: https://github.com/idrissneumann/kompose-api
 * Gitlab mirror backup: https://gitlab.com/ineumann/kompose-api
 
-## Endpoints
-### Health check
+## Getting started
+
+### Run the api using docker-compose
+
+```shell
+$ git clone https://gitlab.comwork.io/oss/kompose-api.git
+$ cd kompose-api
+$ docker-compose up -d
+```
+
+### Endpoints
+#### Health check
 
 ```shell
 $ curl http://0.0.0.0:8080/|jq .
@@ -23,7 +33,7 @@ $ curl http://0.0.0.0:8080/|jq .
 }
 ```
 
-### Getting the kompose versions
+#### Getting the kompose versions
 
 ```shell
 curl http://0.0.0.0:8080/kompose/versions|jq .
@@ -38,7 +48,7 @@ curl http://0.0.0.0:8080/kompose/versions|jq .
 
 The you'll have to refer to [kompose website](./https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
 
-## Manifest endpoint
+### Manifest endpoint
 
 ```shell
 $ curl http://0.0.0.0:8080/manifest|jq .
