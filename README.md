@@ -15,7 +15,7 @@ curl -X POST https://kompose.comwork.io/ -F "file=@docker-compose.yml" | kubectl
 or
 
 ```shell
-curl -X POST https://kompose.k8s.yourcluster.io/ -F "file=@docker-compose.yml" -H "X-K8S-Apply: true"
+curl -X POST https://kompose.k8s.yourcluster.io/ -F "file=@docker-compose.yml" -H "X-K8S-Apply: true" -H "X-K8S-NS: your-namespace"
 ```
 
 In the case where you've deployed your own instance on your own cluster with the right service-account (of course you'll have to replace `https://kompose.k8s.yourcluster.io` by your own url).
