@@ -28,15 +28,13 @@ $ cd kompose-api
 $ docker-compose up -d
 ```
 
+Then, you'll be able to use the available endpoints below using `http://0.0.0.0:8080/` instead of `https://kompose.comwork.io`.
+
 ### Endpoints
-
-The following endpoints are also available here: https://kompose.comwork.io
-
-So you can for each one replace `http://0.0.0.0:8080/` by `https://kompose.comwork.io`
 #### Health check
 
 ```shell
-$ curl http://0.0.0.0:8080/|jq .
+$ curl https://kompose.comwork.io|jq .
 {
   "status": "ok",
   "alive": true
@@ -46,7 +44,7 @@ $ curl http://0.0.0.0:8080/|jq .
 #### Getting the kompose versions
 
 ```shell
-curl http://0.0.0.0:8080/versions|jq .
+curl https://kompose.comwork.io/versions|jq .
 {
   "status": "ok",
   "available_versions": [
@@ -61,7 +59,7 @@ The you'll have to refer to [kompose website](./https://kompose.io/) in order to
 ### Convert a docker-compose file into Kubernetes manifest
 
 ```shell
-$ curl -X POST http://0.0.0.0:8080/ -F "file=@docker-compose.yml"
+$ curl -X POST https://kompose.comwork.io/ -F "file=@docker-compose.yml"
 apiVersion: v1
 items:
   - apiVersion: v1
@@ -127,9 +125,11 @@ Note: the following headers are available:
 ### Manifest endpoint
 
 ```shell
-$ curl http://0.0.0.0:8080/manifest|jq .
+$ curl "https://kompose.comwork.io/manifest"|jq .
 {
-  "sha": "043633e19674a7b18a17cde26143ad94effe3dbd"
+  "version": "1.0",
+  "sha": "ec4015c",
+  "arch": "x86"
 }
 ```
 
