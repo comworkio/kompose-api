@@ -42,7 +42,7 @@ kompose-deploy:
       - Dockerfile
       - docker-compose-build-x86.yml
       - docker-compose-comwork.yml
-      - ci/docker-deliver.sh
+      - ci/deploy.sh
       - kompose_versions.sh
       - konvert.sh
       - .gitlab-ci.yml
