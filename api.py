@@ -18,8 +18,13 @@ def get_script_output (cmd):
     except:
         return check_output(cmd, shell=True, universal_newlines=True)
 
+def is_forbidden (var):
+    forbidden_chars = ["'" , "\"", "&", ";", "|", "\\"]
+    return any(char in var for char in forbidden_chars)
+
 def is_not_empty (var):
-    return var is not None and "" != var and "null" != var and "nil" != var and "false" != var and "False" != var
+    empty_chars = ["", "null", "nil", "false", "False", "FALSE"]
+    return var is not None and not any(c == var for c in empty_chars)
 
 def is_empty (var):
     return not is_not_empty(var)
@@ -72,10 +77,15 @@ class KomposeApi(Resource):
         if is_empty(namespace):
             namespace = "null"
 
-        apply = request.headers.get('X-K8S-Apply')
-        
+        apply = request.headers.get('X-K8S-Apply')        
         if is_empty(namespace) or is_empty(os.environ['ENABLE_KUBECTL_APPLY']):
             apply = "null"
+
+        if any(is_forbidden(arg) for arg in [provider, namespace, apply]):
+            return {
+                'status': 'forbidden',
+                'reason': 'forbidden character in the headers' 
+            }, 403
 
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=FileStorage, location='files')
@@ -92,7 +102,10 @@ class ManifestEndPoint(Resource):
                 manifest = json.load(manifest_file)
                 return manifest
         except IOError as err:
-            return 500, {'status': 'error', 'reason': err}
+            return {
+                'status': 'error', 
+                'reason': err
+            }, 500
 
 kompose_routes = ['/', '/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
 versions_routes = ['/versions', '/versions/']
