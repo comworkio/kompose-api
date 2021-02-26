@@ -13,7 +13,7 @@ COPY ./api.py ./manifest.json ./requirements.txt /
 RUN pip3 install --upgrade pip && \
     pip3 install -r /requirements.txt && \
     apk add --no-cache curl && \
-    curl -LO "https://github.com/kubernetes/kompose/releases/download/v${K8S_VERSION}/kompose-linux-${K8S_ARCH}" -o /usr/bin/kompose &&
+    curl -LO "https://github.com/kubernetes/kompose/releases/download/v${K8S_VERSION}/kompose-linux-${K8S_ARCH}" -o /usr/bin/kompose && \
     chmod +x /usr/bin/kompose
 
 EXPOSE 8080
