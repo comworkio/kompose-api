@@ -26,13 +26,14 @@ kompose-api-x86:
       - ci/docker-deliver.sh
       - kompose_versions.sh
       - konvert.sh
+      - .gitlab-ci.yml
   tags:
     - kompose-api
 
 kompose-deploy:
   stage: deploy
   script:
-    - setsid ./ci/docker-deliver.sh "kompose-api" "1.0" "x86"
+    - setsid ./ci/deploy.sh
   only:
     refs:
       - /^(main.*)$/
@@ -44,5 +45,6 @@ kompose-deploy:
       - ci/docker-deliver.sh
       - kompose_versions.sh
       - konvert.sh
+      - .gitlab-ci.yml
   tags:
     - kompose-api
