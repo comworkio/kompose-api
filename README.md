@@ -48,6 +48,72 @@ curl http://0.0.0.0:8080/kompose/versions|jq .
 
 The you'll have to refer to [kompose website](./https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
 
+### Convert a docker-compose file into Kubernetes manifest
+
+```shell
+$ curl -X POST http://0.0.0.0:8080/kompose -F "file=@docker-compose.yml"
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose-1.22.0 convert -f docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml -o docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml.k8s.yml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kompose-api
+      name: kompose-api
+    spec:
+      ports:
+        - name: "8080"
+          port: 8080
+          targetPort: 8080
+      selector:
+        io.kompose.service: kompose-api
+    status:
+      loadBalancer: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        kompose.cmd: kompose-1.22.0 convert -f docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml -o docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml.k8s.yml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kompose-api
+      name: kompose-api
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: kompose-api
+      strategy: {}
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose-1.22.0 convert -f docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml -o docker-compose-6754a9a0-782b-11eb-8358-0242ac1a0002.yml.k8s.yml
+            kompose.version: 1.22.0 (955b78124)
+          creationTimestamp: null
+          labels:
+            io.kompose.service: kompose-api
+        spec:
+          containers:
+            - image: comworkio/kompose-api:latest
+              name: kompose-api
+              ports:
+                - containerPort: 8080
+              resources: {}
+          restartPolicy: Always
+    status: {}
+kind: List
+metadata: {}
+```
+
+Note: the following headers are available:
+* `X-Kompose-Version`: the version of `kompose` you want to use (see the previous endpoint to see which versions are avaible)
+* `X-K8S-Provider`: the K8S provider (i.e: `OpenShift`)
+
 ### Manifest endpoint
 
 ```shell
