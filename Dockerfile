@@ -2,8 +2,6 @@ FROM python:3-alpine
 
 ENV K8S_VERSION=1.18.2 \
     K8S_ARCH=amd64 \
-    YQ_VERSION=v4.2.1 \
-    YQ_BINARY=yq_linux_amd64 \
     FLASK_APP=/api.py \
     FLASK_RUN_HOST=0.0.0.0 \
     FLASK_RUN_PORT=8080 \
@@ -14,15 +12,9 @@ COPY ./api.py ./manifest.json ./requirements.txt /
 
 RUN pip3 install --upgrade pip && \
     pip3 install -r /requirements.txt && \
-    apk add --no-cache bash curl jq && \
-    curl -LO "https://storage.googleapis.com/kubernetes-release/release/v$K8S_VERSION/bin/linux/$K8S_ARCH/kubectl" && \
-    mv ./kubectl /usr/bin/kubectl && \
-    chmod +x /usr/bin/kubectl && \
-    curl -LO "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}.tar.gz" && \
-    tar xvzf ${YQ_BINARY}.tar.gz && \
-    mv ${YQ_BINARY} /usr/bin/yq && \ 
-    chmod +x /usr/bin/yq && \
-    rm -rf ${YQ_BINARY}.tar.gz
+    apk add --no-cache curl && \
+    curl -LO "https://github.com/kubernetes/kompose/releases/download/v${K8S_VERSION}/kompose-linux-${K8S_ARCH}" -o /usr/bin/kompose &&
+    chmod +x /usr/bin/kompose
 
 EXPOSE 8080
 
