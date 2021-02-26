@@ -15,7 +15,7 @@ mirror:
 kompose-api-x86:
   stage: publish
   script:
-    - setsid ./ci/docker-deliver.sh "kompose-api" "2.0" "x86"
+    - setsid ./ci/docker-deliver.sh "kompose-api" "2.1" "x86"
   only:
     refs:
       - /^(main.*)$/

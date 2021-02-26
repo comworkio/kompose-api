@@ -38,7 +38,7 @@ class VersionsApi(Resource):
     def get(self):
         return {
             'status': 'ok',
-            'kompose_versions': get_kompose_available_versions("KOMPOSE_VERSIONS"),
+            'kompose_versions': get_available_versions("KOMPOSE_VERSIONS"),
             'kubectl_versions': get_available_versions("K8S_VERSION")
         }
 
@@ -70,6 +70,7 @@ class KomposeApi(Resource):
             namespace = "null"
 
         apply = request.headers.get('X-K8S-Apply')
+        
         if is_empty(namespace) or is_empty(os.environ['ENABLE_KUBECTL_APPLY']):
             apply = "null"
 
