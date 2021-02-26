@@ -30,6 +30,12 @@ In the case where you've deployed your own instance on your own cluster with the
 * Github mirror backup: https://github.com/idrissneumann/kompose-api
 * Gitlab mirror backup: https://gitlab.com/ineumann/kompose-api
 
+## Docker hub repo
+
+The image is available here: https://hub.docker.com/repository/docker/comworkio/kompose-api
+
+You can run it wherever there is an OCI runtime container available (docker, kubernetes, podman, etc).
+
 ## Getting started
 
 ### Hosted by comwork
