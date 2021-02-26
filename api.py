@@ -1,18 +1,18 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
-
+from flask_restful import Resource, Api, reqparse
+from werkzeug.datastructures import FileStorage
 from subprocess import check_output
 from multiprocessing import Process
 import os
 import json
 import sys
 import re
+import uuid 
 
 app = Flask(__name__)
 api = Api(app)
 
 def get_script_output (cmd):
-    print("[get_script_output] cmd = {}".format(cmd))
     try:
         return check_output(cmd, shell=True, text=True)
     except:
@@ -28,37 +28,43 @@ def is_empty_request_field (name):
     body = request.get_json(force=True)
     return not name in body or is_empty(body[name])
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+def get_kompose_available_versions():
+    return json.loads(get_script_output("/kompose_versions.sh"))
 
-def is_not_ok(body):
-    return not "status" in body or body["status"] != "ok"
-
-def check_mandatory_param(name):
-    if is_empty_request_field(name):
-        eprint("[check_mandatory_param] bad request : missing argument = {}, body = {}".format(name, request.data))
-        return {
-            "status": "bad_request",
-            "reason": "missing {} argument".format(name)
-        }
-    else:
-        return {
-            "status": "ok"
-        }
+def konvert (filname, provider):
+    return get_script_output("/konvert.sh {} {}".format(filname, provider))
 
 class KomposeVersionsApi(Resource):
     def get(self):
         return {
             'status': 'ok',
-            'available_pipelines': json.loads(get_script_output("/kompose_versions.sh"))
+            'available_versions': get_kompose_available_versions()
         }
 
 class KomposeApi(Resource):
     def post(self):
-        return {
-            'status': 'to develop',
-            'executed': True
-        }
+        available_versions = get_kompose_available_versions()
+        requested_version = request.headers.get('X-Kompose-Version')
+        
+        if is_empty(requested_version):
+            requested_version = os.environ['KOMPOSE_VERSION_N']
+
+        if not requested_version in available_versions:
+            return {
+                'status': 'not_implemented',
+                'reason': "{} version of kompose is not available!".format(requested_version)
+            }, 405
+
+        provider = request.headers.get('X-K8S-Provider')
+        parse = reqparse.RequestParser()
+        parse.add_argument('file', type=FileStorage, location='files')
+        args = parse.parse_args()
+        tmp_file = args['file']
+        filename = "docker-compose-{}.yml".format(uuid.uuid1())
+        tmp_file.save(filename)
+        return konvert(filename, provider), "application/x-yaml"
+        
+        return file.read()
 
 class RootEndPoint(Resource):
     def get(self):

@@ -39,7 +39,7 @@ $ curl http://0.0.0.0:8080/|jq .
 curl http://0.0.0.0:8080/kompose/versions|jq .
 {
   "status": "ok",
-  "available_pipelines": [
+  "available_versions": [
     "1.21.0",
     "1.22.0"
   ]
