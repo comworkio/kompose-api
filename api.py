@@ -5,7 +5,6 @@ from subprocess import check_output
 from multiprocessing import Process
 import os
 import json
-import sys
 import re
 import uuid 
 
@@ -107,12 +106,12 @@ class ManifestEndPoint(Resource):
                 'reason': err
             }, 500
 
-kompose_routes = ['/', '/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
+kompose_routes = ['/']
 versions_routes = ['/versions', '/versions/']
 manifest_routes = ['/manifest', '/manifest/']
 
-api.add_resource(VersionsApi, *versions_routes)
 api.add_resource(KomposeApi, *kompose_routes)
+api.add_resource(VersionsApi, *versions_routes)
 api.add_resource(ManifestEndPoint, *manifest_routes)
 
 if __name__ == '__main__':
