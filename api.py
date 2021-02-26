@@ -46,6 +46,13 @@ def check_mandatory_param(name):
             "status": "ok"
         }
 
+class KomposeVersionsApi(Resource):
+    def get(self):
+        return {
+            'status': 'ok',
+            'available_pipelines': json.loads(get_script_output("/kompose_versions.sh"))
+        }
+
 class KomposeApi(Resource):
     def post(self):
         return {
@@ -70,10 +77,12 @@ class ManifestEndPoint(Resource):
             return 500, {'status': 'error', 'reason': err}
 
 health_check_routes = ['/', '/health', '/health/']
-kompose_routes = ['/cmd', '/kompose-api', '/kompose/', '/kompose-api/']
+kompose_versions_routes = ['/kompose/versions', '/kompose-api/versions', '/kompose/versions/', '/kompose-api/versions/']
+kompose_routes = ['/kompose', '/kompose-api', '/kompose/', '/kompose-api/']
 manifest_routes = ['/manifest', '/manifest/']
 
 api.add_resource(RootEndPoint, *health_check_routes)
+api.add_resource(KomposeVersionsApi, *kompose_versions_routes)
 api.add_resource(KomposeApi, *kompose_routes)
 api.add_resource(ManifestEndPoint, *manifest_routes)
 
