@@ -38,8 +38,6 @@ You can run it wherever there is an OCI runtime container available (docker, kub
 
 ## Getting started
 
-### Hosted by comwork
-
 ### Run the api using docker-compose
 
 ```shell
@@ -51,6 +49,7 @@ $ docker-compose up -d
 Then, you'll be able to use the available endpoints below using `http://0.0.0.0:8080/` instead of `https://kompose.comwork.io`.
 
 ### Endpoints
+
 #### Health check
 
 ```shell
