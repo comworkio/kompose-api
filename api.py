@@ -1,4 +1,9 @@
 from flask import Flask, request, Response
+
+## https://github.com/flask-restful/flask-restful/pull/913
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
+
 from flask_restful import Resource, Api, reqparse
 from werkzeug.datastructures import FileStorage
 from subprocess import check_output
@@ -122,7 +127,7 @@ class DocEndPoint(Resource):
             return {'status': 'error', 'reason': err}, 500
 
 
-kompose_routes = ['/']
+kompose_routes = ['/', '/v1', '/v1/']
 versions_routes = ['/versions', '/versions/', '/v1/versions', '/v1/versions/']
 manifest_routes = ['/manifest', '/manifest/', '/v1/manifest', '/v1/manifest/']
 doc_routes = ['/doc', '/doc/', '/v1/doc', '/v1/doc/']
