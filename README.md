@@ -76,7 +76,7 @@ curl https://kompose.comwork.io/versions|jq .
 }
 ```
 
-The you'll have to refer to [kompose website](./https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
+The you'll have to refer to [kompose website](https://kompose.io/) in order to get more informations such as compatibility matrix with docker-compose and kubernetes, etc.
 
 #### Getting an html rendered documentation
 
