@@ -9,9 +9,11 @@ ENV ENABLE_KUBECTL_APPLY=false \
     FLASK_RUN_HOST=0.0.0.0 \
     FLASK_RUN_PORT=8080 \
     WERKZEUG_RUN_MAIN=true \
-    MANIFEST_FILE_PATH=/manifest.json
+    MANIFEST_FILE_PATH=/manifest.json \
+    README_FILE_PATH=/README.md \
+    KOMPOSE_DOC_URL=http://127.0.0.1:8080/doc
 
-COPY ./api.py ./manifest.json ./versions.sh ./konvert.sh ./requirements.txt /
+COPY ./README.md ./api.py ./manifest.json ./versions.sh ./konvert.sh ./requirements.txt /
 
 RUN pip3 install --upgrade pip && \
     pip3 install -r /requirements.txt && \

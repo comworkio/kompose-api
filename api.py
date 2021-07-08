@@ -5,8 +5,8 @@ from subprocess import check_output
 from multiprocessing import Process
 import os
 import json
-import re
 import uuid 
+import markdown
 
 app = Flask(__name__)
 api = Api(app)
@@ -50,14 +50,16 @@ class VersionsApi(Resource):
         return {
             'status': 'ok',
             'kompose_versions': get_kompose_available_versions(),
-            'kubectl_versions': get_available_versions("K8S_VERSION")
+            'kubectl_versions': get_available_versions("K8S_VERSION"),
+            'help': "Go see {}".format(os.environ['KOMPOSE_DOC_URL'])
         }
 
 class KomposeApi(Resource):
     def get(self):
         return {
             'status': 'ok',
-            'alive': True
+            'alive': True,
+            'help': "Go see {}".format(os.environ['KOMPOSE_DOC_URL']) 
         }
     def post(self):
         available_versions = get_kompose_available_versions()
@@ -110,13 +112,25 @@ class ManifestEndPoint(Resource):
                 'reason': err
             }, 500
 
+class DocEndPoint(Resource):
+    def get(self):
+        try:
+            with open(os.environ['README_FILE_PATH'], 'r') as doc:
+                html = markdown.markdown(doc.read())
+                return Response(html, mimetype='text/html')
+        except IOError as err:
+            return {'status': 'error', 'reason': err}, 500
+
+
 kompose_routes = ['/']
-versions_routes = ['/versions', '/versions/']
-manifest_routes = ['/manifest', '/manifest/']
+versions_routes = ['/versions', '/versions/', '/v1/versions', '/v1/versions/']
+manifest_routes = ['/manifest', '/manifest/', '/v1/manifest', '/v1/manifest/']
+doc_routes = ['/doc', '/doc/', '/v1/doc', '/v1/doc/']
 
 api.add_resource(KomposeApi, *kompose_routes)
 api.add_resource(VersionsApi, *versions_routes)
 api.add_resource(ManifestEndPoint, *manifest_routes)
+api.add_resource(DocEndPoint, *doc_routes)
 
 if __name__ == '__main__':
     app.run()
