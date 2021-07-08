@@ -56,7 +56,7 @@ class VersionsApi(Resource):
             'status': 'ok',
             'kompose_versions': get_kompose_available_versions(),
             'kubectl_versions': get_available_versions("K8S_VERSION"),
-            'help': "Go see {}".format(os.environ['KOMPOSE_DOC_URL'])
+            'help': "Go see <a href='{}'>the documentation</a>".format(os.environ['KOMPOSE_DOC_URL'])
         }
 
 class KomposeApi(Resource):
@@ -64,7 +64,7 @@ class KomposeApi(Resource):
         return {
             'status': 'ok',
             'alive': True,
-            'help': "Go see {}".format(os.environ['KOMPOSE_DOC_URL']) 
+            'help': "Go see <a href='{}'>the documentation</a>".format(os.environ['KOMPOSE_DOC_URL']) 
         }
     def post(self):
         available_versions = get_kompose_available_versions()
