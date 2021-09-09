@@ -1,24 +1,17 @@
 import os
-import json
 import uuid 
-import markdown
 
 from flask import Flask, request, Response
 from flask_restful import Resource, Api, reqparse
 from werkzeug.datastructures import FileStorage
 from kompose_api_utils import *
 
+from api_manifest import ManifestApi
+from api_versions import VersionsApi
+from api_doc import DocApi
+
 app = Flask(__name__)
 api = Api(app)
-
-class VersionsApi(Resource):
-    def get(self):
-        return {
-            'status': 'ok',
-            'kompose_versions': get_kompose_available_versions(),
-            'kubectl_versions': get_available_versions("K8S_VERSION"),
-            'help': "Go see the documentation here: {}".format(os.environ['KOMPOSE_DOC_URL'])
-        }
 
 class KomposeApi(Resource):
     def get(self):
@@ -66,28 +59,6 @@ class KomposeApi(Resource):
         tmp_file.save(filename)
         return Response(konvert(filename, requested_version, provider, namespace, apply), mimetype='application/x-yaml')    
 
-class ManifestEndPoint(Resource):
-    def get(self):
-        try:
-            with open(os.environ['MANIFEST_FILE_PATH']) as manifest_file:
-                manifest = json.load(manifest_file)
-                return manifest
-        except IOError as err:
-            return {
-                'status': 'error', 
-                'reason': err
-            }, 500
-
-class DocEndPoint(Resource):
-    def get(self):
-        try:
-            with open(os.environ['README_FILE_PATH'], 'r') as doc:
-                html = markdown.markdown(doc.read())
-                return Response(html, mimetype='text/html')
-        except IOError as err:
-            return {'status': 'error', 'reason': err}, 500
-
-
 kompose_routes = ['/', '/v1', '/v1/']
 versions_routes = ['/versions', '/versions/', '/v1/versions', '/v1/versions/']
 manifest_routes = ['/manifest', '/manifest/', '/v1/manifest', '/v1/manifest/']
@@ -95,8 +66,8 @@ doc_routes = ['/doc', '/doc/', '/v1/doc', '/v1/doc/']
 
 api.add_resource(KomposeApi, *kompose_routes)
 api.add_resource(VersionsApi, *versions_routes)
-api.add_resource(ManifestEndPoint, *manifest_routes)
-api.add_resource(DocEndPoint, *doc_routes)
+api.add_resource(ManifestApi, *manifest_routes)
+api.add_resource(DocApi, *doc_routes)
 
 if __name__ == '__main__':
     app.run()
