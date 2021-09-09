@@ -2,7 +2,7 @@ version: "3.3"
 
 services: 
   kompose-api:
-    image: comworkio/kompose-api:2.13
+    image: comworkio/kompose-api:latest
     user: root
     environment:
       - FLASK_RUN_PORT=8072
