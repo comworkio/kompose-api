@@ -1,8 +1,7 @@
-from flask_restful import Resource
-
 import os
 import json
 
+from flask_restful import Resource
 class ManifestApi(Resource):
     def get(self):
         try:
