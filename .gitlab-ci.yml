@@ -20,12 +20,10 @@ kompose-api-x86:
     refs:
       - /^(main.*)$/
     changes:
-      - api.py
       - Dockerfile
       - docker-compose-build-x86.yml
       - ci/docker-deliver.sh
-      - kompose_versions.sh
-      - konvert.sh
+      - api/*
       - README.md
       - .gitlab-ci.yml
   tags:
@@ -39,13 +37,10 @@ kompose-deploy:
     refs:
       - /^(main.*)$/
     changes:
-      - api.py
       - Dockerfile
-      - docker-compose-build-x86.yml
       - docker-compose-comwork.yml
       - ci/deploy.sh
-      - kompose_versions.sh
-      - konvert.sh
+      - api/*
       - README.md
       - .gitlab-ci.yml
   tags:
