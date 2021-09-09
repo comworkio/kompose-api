@@ -1,9 +1,9 @@
 FROM python:3-alpine
 
 ENV ENABLE_KUBECTL_APPLY=false \
-    K8S_VERSION=1.18.2 \
-    KOMPOSE_VERSION_N=1.22.0 \
-    KOMPOSE_VERSION_NLESS1=1.21.0 \
+    K8S_VERSION=1.22.1 \
+    KOMPOSE_VERSION_N=1.24.0 \
+    KOMPOSE_VERSION_NLESS1=1.23.0 \
     ARCH=amd64 \
     FLASK_APP=/api.py \
     FLASK_RUN_HOST=0.0.0.0 \
@@ -13,7 +13,7 @@ ENV ENABLE_KUBECTL_APPLY=false \
     README_FILE_PATH=/README.md \
     KOMPOSE_DOC_URL=http://127.0.0.1:8080/doc
 
-COPY ./README.md ./api.py ./manifest.json ./versions.sh ./konvert.sh ./requirements.txt /
+COPY ./api ./README.md ./manifest.json /
 
 RUN pip3 install --upgrade pip && \
     pip3 install -r /requirements.txt && \
