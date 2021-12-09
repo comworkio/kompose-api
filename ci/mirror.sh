@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_PATH="/home/centos/kompose-api/"
+REPO_PATH="${PROJECT_HOME}/kompose-api/"
 
 cd "${REPO_PATH}" && git pull origin main || :
 git push github main 
