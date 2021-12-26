@@ -10,7 +10,7 @@ mirror:
   only:
     - /^(main.*)$/
   tags:
-    - kompose-api
+    - mirror
 
 kompose-api-x86:
   stage: publish
