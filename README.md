@@ -29,6 +29,7 @@ In the case where you've deployed your own instance on your own cluster with the
 * Main repo: https://gitlab.comwork.io/oss/kompose-api
 * Github mirror backup: https://github.com/idrissneumann/kompose-api
 * Gitlab mirror backup: https://gitlab.com/ineumann/kompose-api
+* Bitbucket mirror backup: https://bitbucket.org/idrissneumann/kompose-api
 
 ## Docker hub repo
 
